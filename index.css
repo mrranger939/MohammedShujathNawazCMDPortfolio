@@ -22,9 +22,28 @@ body{
     background-color: transparent;
     color: var(--Tgreen);
     border: none;
+    caret-color: transparent;
+    position: relative;
 }
 #prompt:focus{
     box-shadow: none;
+}
+#prompt::after{
+    content: "";
+    display: inline-block;
+    width: 6px; 
+    height: 1.2rem;
+    background: var(--Tgreen);
+    animation: blink 1s steps(1) infinite;
+    position: absolute;
+}
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
 @media (max-width: 777px) {
   .systemName {
