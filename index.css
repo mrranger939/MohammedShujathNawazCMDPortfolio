@@ -1,13 +1,41 @@
+:root {
+  --Tgreen: rgb(6, 201, 6);
+}
+
 body{
     background-color: black;
-    color: rgb(6, 201, 6);
+    color: var(--Tgreen);
     font-family: 'Cascadia Code', 'VT323', 'Times New Roman', Times, serif;
 }
-.vt323-regular {
-  font-family: "VT323", monospace;
-  font-weight: 400;
-  font-style: normal;
+.cmdLine{
+    display: flex;
+    align-items: center; 
+    flex-wrap: wrap; 
 }
-
-
+.systemName{
+    white-space: nowrap; 
+    margin: 0; 
+}
+#prompt {
+    flex: 1; 
+    min-width: 150px;
+    background-color: transparent;
+    color: var(--Tgreen);
+    border: none;
+}
+#prompt:focus{
+    box-shadow: none;
+}
+@media (max-width: 777px) {
+  .systemName {
+    white-space: normal;
+  }
+  .cmdLine {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #prompt {
+    width: auto;
+  }
+}
 
