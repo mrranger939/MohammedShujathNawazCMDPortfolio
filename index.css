@@ -16,7 +16,7 @@ body{
     white-space: nowrap; 
     margin: 0; 
 }
-#prompt {
+.prompt {
     flex: 1; 
     min-width: 150px;
     background-color: transparent;
@@ -25,16 +25,26 @@ body{
     caret-color: transparent;
     position: relative;
 }
-#prompt:focus{
+.prompt:focus{
     box-shadow: none;
+    color: var(--Tgreen);
+    background-color: transparent;
 }
-#prompt::after{
+.prompt::after{
     content: "";
     display: inline-block;
     width: 6px; 
     height: 1.2rem;
     background: var(--Tgreen);
     animation: blink 1s steps(1) infinite;
+    position: absolute;
+}
+.stopCursor::after{
+    content: "";
+    display: inline-block;
+    width: 0px; 
+    height: 0px;
+    background: var(--Tgreen);
     position: absolute;
 }
 @keyframes blink {
