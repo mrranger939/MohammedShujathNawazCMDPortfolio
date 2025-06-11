@@ -1,9 +1,10 @@
+import {data} from './data.js'
 $(document).ready(function () {
   function placeCursorAtEnd(el) {
     el.focus();
   }
 
-
+  console.log(data)
   function bindPromptEvents($prompt) {
     $prompt.on("input", function () {
       if ($(this).html() === "<br>" || $(this).html() === "") {
@@ -19,11 +20,10 @@ $(document).ready(function () {
         $prompt.addClass("stopCursor");
         let outputHTML = "";
         if (cmd === "ls") {
+          const lsData = data.ls;
           outputHTML += `
-            <div class="cmdOutput">
-              <p>index.html</p>
-              <p>style.css</p>
-              <p>app.js</p>
+            <div class="d-flex gap-3 flex-wrap">
+              ${lsData.map(item=>`<p>${item}</p>`).join('')}
             </div>
           `;
         } else {
