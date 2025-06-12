@@ -26,7 +26,48 @@ $(document).ready(function () {
               ${lsData.map(item=>`<p>${item}</p>`).join('')}
             </div>
           `;
-        } else {
+        } else if(cmd === "cat Education.txt"){
+          outputHTML += `<div class="education">
+                    <br>
+                    <p>Chaitanya Bharathi Institute of Technology</p>
+                    <p>Hyderabad, Telangana</p>
+                    <p> B.E in Computer Science and Engineering</p>
+                    <p>CGPA: 9.55</p>
+                    <p>2022 - 2026</p>
+                    <div class="breakLineCollection">
+                      <hr class="breakLine">
+                      <hr class="breakLine">
+                      <!-- <p class="breakLineEqual">===================================================================================================================================================================================</p> -->
+                    </div>
+                    <br>
+                    <p>Prathibha Junior College</p>
+                    <p>Mahabubnagar, Telangana</p>
+                    <p>Intermediate: Mathematics, Physics, Chemistry</p>
+                    <p>CGPA: 9.89</p>
+                    <p> 2020 - 2022</p>
+                    <div class="breakLineCollection">
+                      <hr class="breakLine">
+                      <hr class="breakLine">
+                      <!-- <p class="breakLineEqual">===================================================================================================================================================================================</p> -->
+                    </div>
+                    <br>
+                    <p> Panchavati Vidyalaya</p>
+                    <p>Mahabubnagar, Telangana</p>
+                    <p>X TGS SSC Board</p>
+                    <p>GPA: 10</p>
+                    <p>2020</p>
+                  </div>`;
+        } else if (cmd === 'cat Skills.txt'){
+          outputHTML += `<div class="skillsSection">
+                    <p><span class="skillName">Languages:</span> Python, Java, JavaScript, C++</p>
+                    <p><span class="skillName">Frontend Technologies: </span> HTML/CSS, React, Next, Bootstrap, Tailwind</p>
+                    <p><span class="skillName">Backend and Databases:</span> Node.js, Express, Flask, MongoDB, SQL</p>
+                    <p><span class="skillName">Machine Learning, Deep Learning </span></p>
+                    <p><span class="skillName">Tools: </span>Kafka, Docker, Git</p>
+                    <p><span class="skillName">Others: </span>Data Structures and Algorithms</p>
+                  </div>`
+        }
+         else {
           outputHTML += `<p>command not found: ${cmd}</p>`;
         }
 

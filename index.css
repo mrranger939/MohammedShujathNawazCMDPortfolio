@@ -47,6 +47,20 @@ body{
     background: var(--Tgreen);
     position: absolute;
 }
+.skillName{
+  font-weight: bolder;
+}
+.breakLineEqual{
+  overflow: hidden;
+}
+.breakLine{
+  margin: 0;
+  margin-bottom: 2px;
+  border-width: 2px;
+  border-color: var(--Tgreen);
+  opacity: 1;
+}
+
 @keyframes blink {
   0%, 50% {
     opacity: 1;
