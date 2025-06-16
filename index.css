@@ -22,7 +22,7 @@ body{
     background-color: transparent;
     color: var(--Tgreen);
     border: none;
-    caret-color: transparent;
+    /* caret-color: transparent; */
     position: relative;
 }
 .prompt:focus{
@@ -30,7 +30,7 @@ body{
     color: var(--Tgreen);
     background-color: transparent;
 }
-.prompt::after{
+/* .prompt::after{
     content: "";
     display: inline-block;
     width: 6px; 
@@ -38,7 +38,7 @@ body{
     background: var(--Tgreen);
     animation: blink 1s steps(1) infinite;
     position: absolute;
-}
+} */
 .stopCursor::after{
     content: "";
     display: inline-block;
@@ -59,6 +59,25 @@ body{
   border-width: 2px;
   border-color: var(--Tgreen);
   opacity: 1;
+}
+.contactSection p {
+  margin: 0.3rem 0;
+}
+
+.contactLabel {
+  font-weight: bold;
+  color: #00ff00; 
+}
+
+.contactSection a {
+  color: #4db8ff;
+  text-decoration: none;
+}
+.contactSection a:hover {
+  text-decoration: underline;
+}
+.rb{
+  color: rgb(6, 201, 6);
 }
 
 @keyframes blink {

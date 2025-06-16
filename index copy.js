@@ -1,16 +1,15 @@
 import { data } from "./data.js";
-
-let directoryStack = ["~"]; // stack to manage directories
+let currentDirectory = "~";
 
 function updatePromptPath() {
-  return `MohammedShujathNawaz@Nawaz-Mohammed:${directoryStack.join("/")}$`;
+  return `MohammedShujathNawaz@Nawaz-Mohammed:${currentDirectory}$`;
 }
-
 $(document).ready(function () {
   function placeCursorAtEnd(el) {
     el.focus();
   }
 
+  console.log(data);
   function bindPromptEvents($prompt) {
     $prompt.on("input", function () {
       if ($(this).html() === "<br>" || $(this).html() === "") {
@@ -22,19 +21,19 @@ $(document).ready(function () {
       if (e.key === "Enter") {
         e.preventDefault();
         const cmd = $prompt.text().trim();
-        const $output = $prompt.closest(".cmdBox").find(".terminalOutput").last();
+        const $output = $prompt
+          .closest(".cmdBox")
+          .find(".terminalOutput")
+          .last();
         $prompt.addClass("stopCursor");
-
         let outputHTML = "";
-
-        // Handle commands
-        const currentDirectory = directoryStack.join("/");
-
-        // ---- Basic Commands ----
-        if (cmd === "ls" && currentDirectory === "~") {
-          outputHTML += `<div class="d-flex gap-3 flex-wrap">
-            ${data.ls.map((item) => `<p>${item}</p>`).join("")}
-          </div>`;
+        if (cmd === "ls") {
+          const lsData = data.ls;
+          outputHTML += `
+            <div class="d-flex gap-3 flex-wrap">
+              ${lsData.map((item) => `<p>${item}</p>`).join("")}
+            </div>
+          `;
         } else if (cmd === "cat Education.txt") {
           outputHTML += `<div class="education">
                     <br>
@@ -73,12 +72,16 @@ $(document).ready(function () {
             <p><span class="contactLabel">LinkedIn:</span> <a href="https://www.linkedin.com/in/mohammed-shujath-nawaz/" target="_blank">https://www.linkedin.com/in/mohammed-shujath-nawaz/</a></p>
             <p><span class="contactLabel">GitHub:</span> <a href="https://github.com/mrranger939" target="_blank">https://github.com/mrranger939</a></p>
           </div>`;
-        } else if (cmd === "cat resume_fullstack.pdf") {
-          outputHTML += `<p>Downloading Full Stack Resume...</p>
-                         <a href="./resume_fullstack.pdf" download>Click to download</a>`;
-        } else if (cmd === "cat resume_ml.pdf") {
-          outputHTML += `<p>Downloading ML Resume...</p>
-                         <a href="./resume_ml.pdf" download>Click to download</a>`;
+        }else if (cmd === 'cat resume_fullstack.pdf') {
+          outputHTML += `
+            <p>Downloading <strong>Full Stack Developer Resume</strong>...</p>
+            <a href="./resume_fullstack.pdf" download class="btn btn-sm rb btn-outline mt-2">Click here if download doesn’t start</a>
+          `;
+        } else if (cmd === 'cat resume_ml.pdf') {
+          outputHTML += `
+            <p>Downloading <strong>Machine Learning Resume</strong>...</p>
+            <a href="./resume_ml.pdf" download class="btn btn-sm btn-outline rb mt-2">Click here if download doesn’t start</a>
+          `;
         } else if (cmd === "cat Experience.txt") {
           outputHTML += `
           <div class="experience mb-4">
@@ -114,7 +117,53 @@ $(document).ready(function () {
           </p>
         </div>
       `;
-        } else if (cmd === "cat Skills.txt") {
+        }else if (cmd === "cd Projects") {
+          currentDirectory = "~/Projects";
+          $prompt.addClass("stopCursor");
+          outputHTML += `
+            <div class="cmdLine">
+              <p class="me-2 systemName">${updatePromptPath()}</p>
+              <div class="form-control ms-0 prompt" contenteditable="true"></div>
+            </div>
+            <div class="terminalOutput"></div>
+          `;
+          $output.append(outputHTML);
+          const $newPrompt = $(".prompt").last();
+          bindPromptEvents($newPrompt);
+          placeCursorAtEnd($newPrompt[0]);
+          return;
+        }else if (cmd === "ls" && currentDirectory === "~/Projects") {
+          const projectNames = Object.keys(data.projects);
+          outputHTML += `
+            <div class="d-flex flex-column gap-1">
+              ${projectNames.map(name => `<p>${name.replaceAll(" ", "_")}.txt</p>`).join("")}
+            </div>
+          `;
+        }
+        else if (cmd.startsWith("cat ") && currentDirectory === "~/Projects") {
+          const filename = cmd.replace("cat ", "").replace(".txt", "").replaceAll("_", " ");
+          const project = data.projects[filename];
+
+          if (project) {
+            outputHTML += `
+              <div class="project mb-4">
+                <p><strong>${filename}</strong></p>
+                <p><span class="text-secondary">Stack:</span> ${project.stack}</p>
+                <ul class="mt-2">
+                  ${project.points.map(p => `<li>${p}</li>`).join("")}
+                </ul>
+                <div class="mt-2">
+                  <a href="${project.github}" target="_blank" class="btn btn-sm btn-outline-primary me-2">GitHub</a>
+                  ${project.live ? `<a href="${project.live}" target="_blank" class="btn btn-sm btn-outline-success">Live</a>` : ""}
+                </div>
+              </div>
+            `;
+          } else {
+            outputHTML += `<p>Project not found: ${filename}</p>`;
+          }
+        }
+
+         else if (cmd === "cat Skills.txt") {
           outputHTML += `<div class="skillsSection">
                     <p><span class="skillName">Languages:</span> Python, Java, JavaScript, C++</p>
                     <p><span class="skillName">Frontend Technologies: </span> HTML/CSS, React, Next, Bootstrap, Tailwind</p>
@@ -123,84 +172,29 @@ $(document).ready(function () {
                     <p><span class="skillName">Tools: </span>Kafka, Docker, Git</p>
                     <p><span class="skillName">Others: </span>Data Structures and Algorithms</p>
                   </div>`;
-        }
-
-        // ---- Directory Navigation ----
-        else if (cmd.startsWith("cd ")) {
-          const target = cmd.split(" ")[1];
-
-          if (target === "..") {
-            if (directoryStack.length > 1) {
-              directoryStack.pop(); // move one level up
-            }
-          } else if (data.ls.includes(target)) {
-            directoryStack.push(target); // go into folder
-          } else {
-            outputHTML += `<p>No such directory: ${target}</p>`;
-          }
-
-          outputHTML += `<div class="cmdLine">
-            <p class="me-2 systemName">${updatePromptPath()}</p>
-            <div class="form-control ms-0 prompt" contenteditable="true"></div>
-          </div>
-          <div class="terminalOutput"></div>`;
-
-          $output.append(outputHTML);
-          const $newPrompt = $(".prompt").last();
-          bindPromptEvents($newPrompt);
-          placeCursorAtEnd($newPrompt[0]);
-          return;
-        }
-
-        // ---- Projects Handling ----
-        else if (cmd === "ls" && currentDirectory === "~/Projects") {
-          const projectNames = Object.keys(data.projects);
-          outputHTML += `<div class="d-flex flex-column gap-1">
-            ${projectNames.map(name => `<p>${name.replaceAll(" ", "_")}.txt</p>`).join("")}
-          </div>`;
-        } else if (cmd.startsWith("cat ") && currentDirectory === "~/Projects") {
-          const filename = cmd.replace("cat ", "").replace(".txt", "").replaceAll("_", " ");
-          const project = data.projects[filename];
-          if (project) {
-            outputHTML += `
-              <div class="project mb-4">
-                <p><strong>${filename}</strong></p>
-                <p><span class=" rb">Stack:</span> ${project.stack}</p>
-                <ul class="mt-2">
-                  ${project.points.map(p => `<li>${p}</li>`).join("")}
-                </ul>
-                <div class="mt-2">
-                  <a href="${project.github}" target="_blank" class="btn btn-sm btn-outline rb me-2">GitHub</a>
-                  ${project.live ? `<a href="${project.live}" target="_blank" class="btn btn-sm btn-outline rb">Live</a>` : ""}
-                </div>
-              </div>`;
-          } else {
-            outputHTML += `<p>Project not found: ${filename}</p>`;
-          }
-        }
-
-        // ---- Fallback ----
-        else {
+        } else {
           outputHTML += `<p>command not found: ${cmd}</p>`;
         }
 
-        // Append new prompt
+        // Append new prompt and output
         outputHTML += `
           <div class="cmdLine">
-            <p class="me-2 systemName">${updatePromptPath()}</p>
+            <p class="me-2 systemName">MohammedShujathNawaz@Nawaz-Mohammed:~/portfolio$</p>
             <div class="form-control ms-0 prompt" contenteditable="true"></div>
           </div>
           <div class="terminalOutput"></div>
         `;
 
         $output.append(outputHTML);
+
         const $newPrompt = $(".prompt").last();
         bindPromptEvents($newPrompt);
         placeCursorAtEnd($newPrompt[0]);
       }
 
       if (e.key === "Backspace") {
-        if ($prompt.text().length === 0) {
+        const text = $prompt.text();
+        if (text.length === 0) {
           e.preventDefault();
         }
       }
@@ -212,6 +206,7 @@ $(document).ready(function () {
   placeCursorAtEnd($initialPrompt[0]);
 
   $(document).on("click", function () {
-    placeCursorAtEnd($(".prompt").last()[0]);
+    const $lastPrompt = $(".prompt").last();
+    placeCursorAtEnd($lastPrompt[0]);
   });
 });
