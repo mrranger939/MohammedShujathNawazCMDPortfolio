@@ -29,7 +29,8 @@
   <body style="background-color: rgb(36, 29, 33); color: white;">
     <div class="container-fluid" >
         <div class="row" style="height: 100vh;">
-            <div class="col-md-12 col-12 mx-auto mt-4 mb-50 ">  
+            <div class="col-md-12 col-12 mx-auto mt-4 mb-50 "> 
+
                 <div class="mx-2" style="display: flex;flex-direction: column;justify-content: space-between; align-items: center; width: 100%; height: 100%;">
                     <nav style="display: flex; justify-content: space-between; width: 100%;">
                         <span style="color: transparent;">ssssss</span>
@@ -42,18 +43,17 @@
                             </div>
                         </span>
                     </nav>
-                    <a href="./login.html" style="color: white; text-decoration: none;">
-                        <div style="border-radius: 1rem;" class="userEnter px-3 py-3"> <!-- rgb(96, 48, 94);  -->
-                            <div style="display: flex; align-items: center;">
-                                <div>
-                                    <img height="60vh"  src="./user.svg" alt="user">
-                                </div>
-                                <div class="mx-4">
-                                    <p class="my-auto">Mohammed Shujath Nawaz</p>
-                                </div>
-                            </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;" class=" px-3 py-3"> <!-- rgb(96, 48, 94);  -->
+                        <div>
+                            <img src="./user.svg" height="100rem" alt="User">
                         </div>
-                    </a>
+                        <div>
+                            <p>Mohammed Shujath Nawaz</p>
+                        </div>
+                        <div>
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Enter password">
+                        </div>
+                    </div>
                     <div class="my-2">
                         <div>
                             <img style="height: 10rem;" src="./ubuntu-logo.avif" alt="ubuntu">
@@ -63,6 +63,31 @@
             </div>
         </div>
     </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background-color: rgb(56, 56, 56);">
+      
+      <!-- Modal Header -->
+      <div class="modal-header" style="border: none;">
+        <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: red;">Incorrect Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body" style="color: red; border: none;">
+        The password you entered is incorrect. You may still enter the terminal, but with limited access and restricted commands.
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer" style="border: none;">
+        <a href="./cmd.html">
+          <button type="button" class="btn btn-secondary">Enter Terminal</button>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</div>
 
 
     <!-- Bootstrap Bundle -->
@@ -73,8 +98,14 @@
     ></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
     <script>
+        document.getElementById('inputPassword').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {      
+            event.preventDefault();
+            var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            myModal.show();
+            }
+        });
           function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');

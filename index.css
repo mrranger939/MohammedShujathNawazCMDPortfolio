@@ -39,6 +39,14 @@ body{
     animation: blink 1s steps(1) infinite;
     position: absolute;
 } */
+
+.userEnter{
+background-color: rgb(56, 56, 56);
+ }
+.userEnter:hover{
+  box-shadow: 0px 0px 10px rgb(181, 154, 169);
+}
+
 .stopCursor::after{
     content: "";
     display: inline-block;
